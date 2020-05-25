@@ -16,5 +16,5 @@ environments:
       max_size: 1024
       use_console: true
     port: '5000'
-    uri: sqlite:///default.sqlite
+    uri: postgresql://vantage:vantage@db/vantage
   test: {}

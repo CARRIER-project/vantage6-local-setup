@@ -1,0 +1,17 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      - "POSTGRES_USER=vantage"
+      - "POSTGRES_PASSWORD=vantage"
+      - "POSTGRES_DB=vantage"
+  vserver:
+    image: "harbor.vantage6.ai/infrastructure/server:latest"
+    depends_on:
+      - db
+    volumes:
+      - ./server-config.yml:/mnt/config.yml
+    command: "vserver-local start -c /mnt/config.yml"
+    ports:
+      - "5000:5000"
