@@ -6,12 +6,24 @@ services:
       - "POSTGRES_USER=vantage"
       - "POSTGRES_PASSWORD=vantage"
       - "POSTGRES_DB=vantage"
+      - "PGDATA=/data"
+    ports:
+      - 5433:5432
+    volumes:
+      - ./pgdata:/data
   vserver:
     image: "harbor.vantage6.ai/infrastructure/server:latest"
     depends_on:
       - db
     volumes:
-      - ./server-config.yml:/mnt/config.yml
+      - ./server:/mnt/
     command: "vserver-local start -c /mnt/config.yml"
     ports:
       - "5000:5000"
+  cbs:
+    image: "harbor.vantage6.ai/infrastructure/node:latest"
+    command: "vnode-local start -c /mnt/config.yml"
+    volumes:
+      - ./cbs-node-config.yml:/mnt/config.yml
+      - ./cbs-data.csv:/data/data.csv
+      - /var/run/docker.sock:/var/run/docker.sock
