@@ -27,3 +27,8 @@ services:
       - ./cbs-node-config.yml:/mnt/config.yml
       - ./cbs-data.csv:/data/data.csv
       - /var/run/docker.sock:/var/run/docker.sock
+
+  registry:
+    image: registry:2
+    ports:
+      - 5001:5000

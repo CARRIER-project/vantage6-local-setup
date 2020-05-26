@@ -8,14 +8,15 @@ DEFAULT_SERVER_ROOT = f'{HOST}:{PORT}/{PREFIX}/'
 OK_RESPONSES = [200, 201]
 DEFAULT_CONTENT_TYPE = 'application/json'
 POST = 'POST'
+DEFAULT_HEADERS = {'Content-Type': DEFAULT_CONTENT_TYPE}
 
 
 class VantageClient():
 
     def __init__(self, username, password):
         # Retrieve a authentication token
-        self.token = VantageClient.get_token(username, password)
-        self.default_headers = {
+        self.token = self.get_token(username, password)
+        self.headers = {
             'Authorization': f'Bearer {self.token}',
             'Content-Type': DEFAULT_CONTENT_TYPE
         }
@@ -24,14 +25,20 @@ class VantageClient():
     def get_url(endpoint) -> str:
         return 'http://' + DEFAULT_SERVER_ROOT + endpoint
 
-    @staticmethod
-    def get_token(username, password):
-        result = VantageClient.request('token/user', {'username': username, 'password': password}, method=POST)
+    def get_token(self, username, password):
+        result = self.request('token/user', {'username': username, 'password': password}, headers=DEFAULT_HEADERS,
+                              method=POST)
         return result['access_token']
+
+    def get(self, endpoint, payload, headers=None) -> dict:
+        return self.request(endpoint, payload, headers, 'GET')
+
+    def post(self, endpoint, payload, headers=None):
+        return self.request(endpoint, payload, headers, 'POST')
 
     def request(self, endpoint, payload, headers=None, method='GET') -> dict:
         if headers is None:
-            headers = self.default_headers
+            headers = self.headers
 
         url = VantageClient.get_url(endpoint)
 
