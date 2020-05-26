@@ -89,8 +89,9 @@ def main():
     for i in range(NUM_NODES):
         result = request('node', {'collaboration_id': collaboration_id}, headers, POST)
         node_id = result['id']
+        api_key = result['api_key']
 
-        print(f'Created node with id: {node_id}')
+        print(f'Created node with id: {node_id}\nApi key: {api_key}')
 
 
 if __name__ == '__main__':
