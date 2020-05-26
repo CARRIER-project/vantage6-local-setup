@@ -1,0 +1,8 @@
+[
+  {
+    "collaboration_id": 1,
+    "image": "harbor.distributedlearning.ai/vantage/vtg.basic:trolltunga",
+    "name": "basic algorithms",
+    "organizations":[{"id":  1}]
+  }
+]

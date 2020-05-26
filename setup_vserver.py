@@ -1,5 +1,8 @@
+from typing import List, Dict
+
 import requests
 import json
+from carrier import VantageClient
 
 ORGANIZATION = {'address1': 'my address 1, Amsterdam',
                 'country': 'the Netherlands',
@@ -23,71 +26,50 @@ POST = 'POST'
 SERVER_ROOT = f'{HOST}:{PORT}/{PREFIX}/'
 COLLABORATION_NAME = 'collab1'
 NUM_NODES = 2
+TASKS = 'tasks.json'
 
 
-def get_url(endpoint) -> str:
-    return 'http://' + SERVER_ROOT + endpoint
-
-
-def request(endpoint, payload, headers=None, method='GET') -> dict:
-    if headers is None:
-        headers = {}
-
-    url = get_url(endpoint)
-
-    print(f'Request {method} {url}')
-
-    headers['Content-Type'] = 'application/json'
-    response = requests.request(method, url, headers=headers, data=json.dumps(payload))
-
-    if response.status_code in OK_RESPONSES:
-        return response.json()
-    else:
-        raise Exception(f'Request returned status {response.status_code}\nMessage: {response.content}')
-
-
-def get_token(username, password):
-    result = request('token/user', {'username': username, 'password': password}, method=POST)
-    access_token = result['access_token']
-    bearer_token = f'Bearer {access_token}'
-    return bearer_token
+def get_tasks() -> List[Dict[str, any]]:
+    with open(TASKS, 'r') as f:
+        return json.load(f)
 
 
 def main():
-    # Get user token
-    bearer_token = get_token(DEFAULT_USERNAME, DEFAULT_PASSWORD)
+    client = VantageClient(DEFAULT_USERNAME, DEFAULT_PASSWORD)
 
     # Create organization
     organization = ORGANIZATION
 
-    headers = {'Authorization': bearer_token}
-    result = request('organization', organization, headers, POST)
+    result = client.post('organization', organization)
     organization_id = result['id']
 
     print(f'Created organization with id {organization_id}')
 
     # Create collaboration
     collaboration = {'name': COLLABORATION_NAME, 'organization_ids': [organization_id]}
-    result = request('collaboration', collaboration, headers, POST)
+    result = client.post('collaboration', collaboration)
 
     collaboration_id = result['id']
 
     print(f'Created collaboration with id {collaboration_id}')
 
     # Create user tied to organization
-    user = dict(ADMIN_USER)
-    user['organization_id'] = organization_id
-    result = request('user', user, headers, POST)
+    # Might already exist
+    try:
+        user = dict(ADMIN_USER)
+        user['organization_id'] = organization_id
+        result = client.post('user', user)
+    except Exception as e:
+        print(e)
 
     print(f'Created new user:\n{result}')
 
-    # Retrieve token for this new user
-    bearer_token = get_token('admin', 'admin')
-    headers = {'Authorization': bearer_token}
+    # Authenticate new user
+    client = VantageClient('admin', 'admin')
 
     # Create nodes
     for i in range(NUM_NODES):
-        result = request('node', {'collaboration_id': collaboration_id}, headers, POST)
+        result = client.post('node', {'collaboration_id': collaboration_id})
         node_id = result['id']
         api_key = result['api_key']
 
