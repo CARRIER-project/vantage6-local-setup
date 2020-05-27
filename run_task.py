@@ -23,6 +23,7 @@ def main():
     task_input = {'method': METHOD, 'args': [], 'kwargs': {}}
     organizations = [{'id': 1, 'input': task_input}]
 
+    # Using my own client because official python client fails for non-encrypted connections
     task = client.post_task('column names', IMAGE, 1, organizations)
 
     print(task)
