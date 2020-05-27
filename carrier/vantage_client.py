@@ -1,5 +1,6 @@
 import requests
 import json
+import base64
 
 HOST = 'localhost'
 PORT = 5000
@@ -35,6 +36,14 @@ class VantageClient():
 
     def post(self, endpoint, payload, headers=None):
         return self.request(endpoint, payload, headers, 'POST')
+
+    def post_task(self, name, image, collaboration_id, organizations):
+        for o in organizations:
+            input_base64 = base64.encodebytes(json.dumps(o['input']).encode())
+            o['input'] = str(input_base64)
+
+        payload = {'collaboration_id': collaboration_id, 'image': image, 'name': name, 'organizations': organizations}
+        return self.post('task', payload)
 
     def request(self, endpoint, payload, headers=None, method='GET') -> dict:
         if headers is None:
