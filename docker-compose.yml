@@ -11,6 +11,7 @@ services:
       - 5433:5432
     volumes:
       - ./pgdata:/data
+
   vserver:
     image: "harbor.vantage6.ai/infrastructure/server:latest"
     depends_on:
@@ -19,7 +20,8 @@ services:
       - ./server:/mnt/
     command: "vserver-local start -c /mnt/config.yml"
     ports:
-      - "5000:5000"
+      - "5001:5000"
+
   cbs:
     image: "harbor.vantage6.ai/infrastructure/node:latest"
     command: "vnode-local start -c /mnt/config.yml"
@@ -28,7 +30,8 @@ services:
       - ./cbs-data.csv:/data/data.csv
       - /var/run/docker.sock:/var/run/docker.sock
 
-  registry:
-    image: registry:2
-    ports:
-      - 5001:5000
+#
+#  registry:
+#    image: registry:2
+#    ports:
+#      - 5001:5000

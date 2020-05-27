@@ -3,7 +3,7 @@ import json
 import base64
 
 HOST = 'localhost'
-PORT = 5000
+PORT = 5001
 PREFIX = 'api'
 DEFAULT_SERVER_ROOT = f'{HOST}:{PORT}/{PREFIX}/'
 OK_RESPONSES = [200, 201]
@@ -31,7 +31,7 @@ class VantageClient():
                               method=POST)
         return result['access_token']
 
-    def get(self, endpoint, payload, headers=None) -> dict:
+    def get(self, endpoint, payload=None, headers=None) -> dict:
         return self.request(endpoint, payload, headers, 'GET')
 
     def post(self, endpoint, payload, headers=None):
@@ -39,8 +39,9 @@ class VantageClient():
 
     def post_task(self, name, image, collaboration_id, organizations):
         for o in organizations:
-            input_base64 = base64.encodebytes(json.dumps(o['input']).encode())
-            o['input'] = str(input_base64)
+            input_base64 = base64.b64encode(json.dumps(o['input']).encode())
+            o['input'] = str(input_base64, 'utf8')
+            print(f'Base64 converted input: {o}')
 
         payload = {'collaboration_id': collaboration_id, 'image': image, 'name': name, 'organizations': organizations}
         return self.post('task', payload)

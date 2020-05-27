@@ -13,7 +13,7 @@ RETRIES = 10
 HOST = 'http://localhost'
 PORT = 5000
 
-IMAGE = 'localhost:5001/v6-carrier-py'
+IMAGE = 'localhost:5000/v6-carrier-py'
 METHOD = 'RPC_column_names'
 
 
@@ -30,12 +30,13 @@ def main():
     for i in range(RETRIES):
         time.sleep(WAIT_TIME)
         try:
-            results = client.get_results(task['id'])
+            results = client.get(f'result/{task["id"]}')
+            print(results)
             break
         except Exception as e:
             print(e)
 
-    print(results)
+
 
 
 if __name__ == '__main__':
