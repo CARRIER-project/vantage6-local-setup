@@ -1,10 +1,7 @@
-import base64
 import json
 import time
-from typing import Dict
-import vantage6.client as vtgclient
 
-from carrier import VantageClient
+import carrier.vantage_client as vtgclient
 
 USERNAME = 'admin'
 PASSWORD = 'admin'
@@ -17,29 +14,28 @@ HOST = 'http://localhost'
 PORT = 5000
 
 IMAGE = 'localhost:5001/v6-carrier-py'
-
-
-def encode_input(x: Dict[str, any]) -> str:
-    s = json.dumps(x).encode()
-    return str(base64.encodebytes(s))
+METHOD = 'RPC_column_names'
 
 
 def main():
-    client = vtgclient.Client(HOST, PORT)
-    client.authenticate(USERNAME, PASSWORD)
-    client.setup_encryption(None)
+    client = vtgclient.VantageClient(USERNAME, PASSWORD)
 
-    task_input = {'method': 'RPC_column_names', 'args': [], 'kwargs': {}}
+    task_input = {'method': METHOD, 'args': [], 'kwargs': {}}
+    organizations = [{'id': 1, 'input': task_input}]
 
-    task = client.post_task('column names', IMAGE, 1,
-                            json.dumps(task_input).encode())
+    task = client.post_task('column names', IMAGE, 1, organizations)
 
     print(task)
 
-    time.sleep(WAIT_TIME)
-    results = client.get_results()
+    for i in range(RETRIES):
+        time.sleep(WAIT_TIME)
+        try:
+            results = client.get_results(task['id'])
+            break
+        except Exception as e:
+            print(e)
 
-    print(results[-1])
+    print(results)
 
 
 if __name__ == '__main__':
