@@ -1,7 +1,6 @@
-import base64
 import time
-import pickle
-import carrier.vantage_client as vtgclient
+
+import vantage6.client as vtgclient
 
 USERNAME = 'admin'
 PASSWORD = 'admin'
@@ -11,32 +10,30 @@ WAIT_TIME = 5
 RETRIES = 10
 
 HOST = 'http://localhost'
-PORT = 5000
+PORT = 5001
 
 IMAGE = 'localhost:5000/v6-carrier-py'
 METHOD = 'column_names'
+COLLABORATION_ID = 1
 
 
 def main():
-    client = vtgclient.VantageClient(USERNAME, PASSWORD)
+    client = vtgclient.Client(HOST, PORT)
+    client.authenticate(USERNAME, PASSWORD)
+    client.setup_encryption(None)
 
-    task_input = {'method': METHOD, 'args': [], 'kwargs': {}}
-    organizations = [{'id': 1, 'input': task_input}]
-
-    # Using my own client because official python client fails for non-encrypted connections
-    task = client.post_task('column names', IMAGE, 1, organizations)
+    task = client.post_task(name='Column names', image=IMAGE, collaboration_id=COLLABORATION_ID, organization_ids=[1]
+                            , input_={'method': 'column_names'})
 
     print(task)
 
     for i in range(RETRIES):
         time.sleep(WAIT_TIME)
         try:
-            result = client.get(f'result/{get_task_result_id(task)}')
-
-            output = result['result']
-            if output:
-                output = pickle.loads(base64.decodebytes(output.encode('ascii')))
-                print(f'Result: {output}')
+            result = client.get_results(task_id=task['id'])[0]
+            print(result)
+            if result['result']:
+                print(result['result'])
                 break
         except Exception as e:
             print(e)
