@@ -1,1 +1,2 @@
 vantage6
+vantage6-client
