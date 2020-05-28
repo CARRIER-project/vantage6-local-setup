@@ -23,12 +23,23 @@ services:
       - "5001:5000"
 
   cbs:
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config.yml"
+    container_name: vantage6-cbs-user
+    depends_on:
+      - vserver
+    build:
+      context: ../vantage6-node/
+    command: "vnode-local start -c /mnt/config/cbs.yml --dockerized"
     volumes:
-      - ./cbs-node-config.yml:/mnt/config.yml
-      - ./cbs-data.csv:/data/data.csv
+      - ./cbs-node-config.yml:/mnt/config/cbs.yml
+      - ./cbs-data.csv:/mnt/database.csv
       - /var/run/docker.sock:/var/run/docker.sock
+      - shared-volume:/mnt/data
+    environment:
+      - DATA_VOLUME_NAME=vantage6-local-setup_shared-volume
+      - DATABASE_URI=/mnt/database.csv
+
+volumes:
+  shared-volume:
 
 #
 #  registry:

@@ -1,8 +1,8 @@
 application:
-  api_key: "c2262f44-9e96-11ea-9981-0242c0a89004"
+  api_key: "e96ae556-a0c4-11ea-9ae3-0242ac130004"
   api_path: /api
   databases:
-    default: /data/data.csv
+    default: data.csv
   encryption:
     enabled: false
   logging:
@@ -15,9 +15,17 @@ application:
     use_console: true
   port: '5000'
   server_url: http://vserver
-  task_dir: /mnt/tasks
+  task_dir: /mnt/data
 environments:
-  acc: {}
-  dev: {}
-  prod: {}
-  test: {}
+  acc: {
+    "node_volume_name": "vantage6-local-setup_shared-volume"
+  }
+  dev: {
+    "node_volume_name": "vantage6-local-setup_shared-volume"
+  }
+  prod: {
+    "node_volume_name": "vantage6-local-setup_shared-volume"
+  }
+  test: {
+    "node_volume_name":"vantage6-local-setup_shared-volume"
+  }
