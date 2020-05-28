@@ -25,8 +25,10 @@ OK_RESPONSES = [200, 201]
 POST = 'POST'
 SERVER_ROOT = f'{HOST}:{PORT}/{PREFIX}/'
 COLLABORATION_NAME = 'collab1'
-NUM_NODES = 2
+NUM_NODES = 1
 TASKS = 'tasks.json'
+
+COLLABORATION_ID = 1
 
 
 def get_tasks() -> List[Dict[str, any]]:
@@ -46,7 +48,7 @@ def main():
     print(f'Created organization with id {organization_id}')
 
     # Create collaboration
-    collaboration = {'name': COLLABORATION_NAME, 'organization_ids': [organization_id]}
+    collaboration = {'name': COLLABORATION_NAME, 'organization_ids': [organization_id], 'id': COLLABORATION_ID}
     result = client.post('collaboration', collaboration)
 
     collaboration_id = result['id']
@@ -70,10 +72,8 @@ def main():
     # Create nodes
     for i in range(NUM_NODES):
         result = client.post('node', {'collaboration_id': collaboration_id})
-        node_id = result['id']
-        api_key = result['api_key']
 
-        print(f'Created node with id: {node_id}\nApi key: {api_key}')
+        print(f'Created node with id: {result}')
 
 
 if __name__ == '__main__':

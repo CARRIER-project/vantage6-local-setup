@@ -1,3 +1,5 @@
+import pickle
+
 import requests
 import json
 import base64
@@ -35,11 +37,12 @@ class VantageClient():
         return self.request(endpoint, payload, headers, 'GET')
 
     def post(self, endpoint, payload, headers=None):
+        print(f'Posting: {payload}')
         return self.request(endpoint, payload, headers, 'POST')
 
     def post_task(self, name, image, collaboration_id, organizations):
         for o in organizations:
-            input_base64 = base64.b64encode(json.dumps(o['input']).encode())
+            input_base64 = base64.b64encode(pickle.dumps(o['input']))
             o['input'] = str(input_base64, 'utf8')
             print(f'Base64 converted input: {o}')
 
