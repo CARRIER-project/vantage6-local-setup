@@ -16,16 +16,4 @@ application:
   port: '5000'
   server_url: http://vserver
   task_dir: /mnt/data
-environments:
-  acc: {
-    "node_volume_name": "vantage6-local-setup_shared-volume"
-  }
-  dev: {
-    "node_volume_name": "vantage6-local-setup_shared-volume"
-  }
-  prod: {
-    "node_volume_name": "vantage6-local-setup_shared-volume"
-  }
-  test: {
-    "node_volume_name":"vantage6-local-setup_shared-volume"
-  }
+
