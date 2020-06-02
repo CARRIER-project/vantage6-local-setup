@@ -1,0 +1,18 @@
+application:
+  api_key: "fab3c6d0-a4dd-11ea-9911-0242ac120005"
+  api_path: /api
+  databases:
+    default: /mnt/database/database.csv
+  encryption:
+    enabled: false
+  logging:
+    backup_count: 5
+    datefmt: '%Y-%m-%d %H:%M:%S'
+    file: fresh.log
+    format: '%(asctime)s - %(name)-14s - %(levelname)-8s - %(message)s'
+    level: DEBUG
+    max_size: 1024
+    use_console: true
+  port: '5000'
+  server_url: http://vserver
+  task_dir: /mnt/data

@@ -77,7 +77,7 @@ def main():
         # Create node
         result = client.post('node', {'collaboration_id': collaboration_id})
 
-        print(f'Created node with id: {result}')
+        print(f'Created node with api key: {result["api_key"]}')
 
 
 def create_user(client, organization_id, username):
