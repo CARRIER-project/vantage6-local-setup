@@ -11,27 +11,33 @@ services:
       - 5433:5432
     volumes:
       - ./pgdata:/data
+#
+#  migrate:
+#    volumes:
+#      - ./migrations:/flyway/sql/
+#    image: boxfuse/flyway
+#    command: migrate -url=jdbc:postgresql://db/vantage -user=vantage -password=vantage -baselineOnMigrate=true -connectRetries=60
 
   vserver:
     image: "harbor.vantage6.ai/infrastructure/server:latest"
     depends_on:
-      - db
+      - migrate
     volumes:
       - ./server:/mnt/
     command: "vserver-local start -c /mnt/config.yml"
     ports:
       - "5001:5000"
 
-  cbs:
-    container_name: vantage6-cbs-user
+  mumc:
+    container_name: vantage6-mumc-user
     depends_on:
       - vserver
     build:
       context: ../vantage6-node/
-    command: "vnode-local start -c /mnt/config/cbs.yml --dockerized"
+    command: "vnode-local start -c /mnt/config/mumc.yml --dockerized"
     volumes:
-      - ./cbs-node-config.yml:/mnt/config/cbs.yml
-      - ./cbs-data.csv:/mnt/database.csv
+      - ./mumc-node-config.yml:/mnt/config/mumc.yml
+      - ./diabetes.csv:/mnt/database/database.csv
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-volume:/mnt/data
     environment:
@@ -40,6 +46,7 @@ services:
 
 volumes:
   shared-volume:
+
 
 #
 #  registry:
