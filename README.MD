@@ -2,6 +2,7 @@
 Local setup can be run as follows:
 
 ```shell script
+# Setup postgres database, vantage server and one node
 docker-compose up -d
 
 # Run docker registry separately. Node tasks are run in a network separate from the node itself. By making the registry
