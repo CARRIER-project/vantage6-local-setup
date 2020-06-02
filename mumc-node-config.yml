@@ -1,8 +1,8 @@
 application:
-  api_key: "e96ae556-a0c4-11ea-9ae3-0242ac130004"
+  api_key: "e42d9b3e-a0f0-11ea-bfb1-0242c0a82003"
   api_path: /api
   databases:
-    default: data.csv
+    default: /mnt/database/database.csv
   encryption:
     enabled: false
   logging:
