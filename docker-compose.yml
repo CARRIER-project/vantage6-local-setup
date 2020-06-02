@@ -20,8 +20,6 @@ services:
 
   vserver:
     image: "harbor.vantage6.ai/infrastructure/server:latest"
-    depends_on:
-      - migrate
     volumes:
       - ./server:/mnt/
     command: "vserver-local start -c /mnt/config.yml"
@@ -32,8 +30,8 @@ services:
     container_name: vantage6-mumc-user
     depends_on:
       - vserver
-    build:
-      context: ../vantage6-node/
+
+    image: "harbor.vantage6.ai/infrastructure/node:latest"
     command: "vnode-local start -c /mnt/config/mumc.yml --dockerized"
     volumes:
       - ./mumc-node-config.yml:/mnt/config/mumc.yml
