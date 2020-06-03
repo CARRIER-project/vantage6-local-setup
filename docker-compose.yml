@@ -42,7 +42,7 @@ services:
       - shared-volume:/mnt/data
     environment:
       - DATA_VOLUME_NAME=vantage6-local-setup_shared-volume
-      - DATABASE_URI=/mnt/database.csv
+      - DATABASE_URI=/mnt/database/database.csv
 
 volumes:
   shared-volume:
