@@ -20,6 +20,8 @@ services:
 
   vserver:
     image: "harbor.vantage6.ai/infrastructure/server:latest"
+    depends_on:
+      - db
     volumes:
       - ./server:/mnt/
     command: "vserver-local start -c /mnt/config.yml"
