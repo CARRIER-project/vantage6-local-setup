@@ -3,20 +3,20 @@ from typing import List
 
 import vantage6.client as vtgclient
 
-USERNAME = 'admin'
+USERNAME = 'admin_6'
 PASSWORD = 'admin'
 
 POST = 'POST'
 WAIT_TIME = 1
-RETRIES = 10
+RETRIES = 20
 
 HOST = 'http://localhost'
 PORT = 5001
 
 IMAGE = 'localhost:5000/v6-carrier-py'
 METHOD = 'column_names'
-COLLABORATION_ID = 1
-ORGANIZATION_ID = 1
+COLLABORATION_ID = 2
+ORGANIZATION_IDS = [4, 5]
 MASTER = False
 NUM_NODES = 2
 
@@ -27,7 +27,7 @@ def main():
     client.setup_encryption(None)
 
     task = client.post_task(name='Column names', image=IMAGE, collaboration_id=COLLABORATION_ID,
-                            organization_ids=[ORGANIZATION_ID], input_={'method': 'column_names', 'master': MASTER})
+                            organization_ids=ORGANIZATION_IDS, input_={'method': 'column_names', 'master': MASTER})
 
     print(task)
 
@@ -37,7 +37,7 @@ def main():
         try:
             results = client.get_results(task_id=task['id'])
             print(results)
-            if (len(results) == 2) and all(map(lambda x: x['complete'], results)):
+            if ((len(results) == NUM_NODES) or MASTER) and all(map(lambda x: x['finished_at'], results)):
                 print('\nReceived result:')
                 print_result(results)
                 break

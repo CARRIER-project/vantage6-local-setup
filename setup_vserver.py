@@ -11,7 +11,6 @@ ORGANIZATION = {'address1': 'my address 1, Amsterdam',
 ADMIN_USER = {'firstname': 'djura',
               'lastname': 'smits',
               'password': 'admin',
-              'username': 'admin',
               'roles': ['admin']
               }
 
@@ -27,6 +26,7 @@ SERVER_ROOT = f'{HOST}:{PORT}/{PREFIX}/'
 COLLABORATION_NAME = 'collab1'
 NUM_NODES = 2
 TASKS = 'tasks.json'
+ORGANIZATION_PREFIX = 'NLESC '
 
 COLLABORATION_ID = 1
 
@@ -39,16 +39,19 @@ def get_tasks() -> List[Dict[str, any]]:
 def main():
     client = VantageClient(DEFAULT_USERNAME, DEFAULT_PASSWORD)
 
-    # Create organization
-    organization = ORGANIZATION
+    organization_ids = []
+    # Every node needs its own organization. User triggering tasks will have separate organization
+    for n in range(NUM_NODES + 1):
+        organization = ORGANIZATION
 
-    result = client.post('organization', organization)
-    organization_id = result['id']
+        result = client.post('organization', organization)
+        organization_id = result['id']
+        organization_ids.append(organization_id)
 
-    print(f'Created organization with id {organization_id}')
+        print(f'Created organization with id {organization_id}')
 
     # Create collaboration
-    collaboration = {'name': COLLABORATION_NAME, 'organization_ids': [organization_id], 'id': COLLABORATION_ID}
+    collaboration = {'name': COLLABORATION_NAME, 'organization_ids': organization_ids, 'id': COLLABORATION_ID}
     result = client.post('collaboration', collaboration)
 
     collaboration_id = result['id']
@@ -57,23 +60,32 @@ def main():
 
     # Create user tied to organization
     # Might already exist
-    try:
-        user = dict(ADMIN_USER)
-        user['organization_id'] = organization_id
-        result = client.post('user', user)
-    except Exception as e:
-        print(e)
+    usernames = []
 
-    print(f'Created new user:\n{result}')
+    for id in organization_ids:
+        try:
+            username = f'admin_{id}'
+            create_user(client, id, username)
+            usernames.append(username)
+        except Exception as e:
+            print(e)
 
-    # Authenticate new user
-    client = VantageClient('admin', 'admin')
+    # Authenticate new user and create new nodes
+    for name in usernames:
+        client = VantageClient(name, 'admin')
 
-    # Create nodes
-    for i in range(NUM_NODES):
+        # Create node
         result = client.post('node', {'collaboration_id': collaboration_id})
 
         print(f'Created node with id: {result}')
+
+
+def create_user(client, organization_id, username):
+    user = dict(ADMIN_USER)
+    user['username'] = username
+    user['organization_id'] = organization_id
+    result = client.post('user', user)
+    print(f'Created new user:\n{result}')
 
 
 if __name__ == '__main__':
