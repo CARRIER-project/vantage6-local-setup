@@ -1,4 +1,5 @@
 import time
+from typing import List
 
 import vantage6.client as vtgclient
 
@@ -16,6 +17,7 @@ IMAGE = 'localhost:5000/v6-carrier-py'
 METHOD = 'column_names'
 COLLABORATION_ID = 1
 ORGANIZATION_ID = 1
+MASTER = False
 
 
 def main():
@@ -24,7 +26,7 @@ def main():
     client.setup_encryption(None)
 
     task = client.post_task(name='Column names', image=IMAGE, collaboration_id=COLLABORATION_ID,
-                            organization_ids=[ORGANIZATION_ID], input_={'method': 'column_names'})
+                            organization_ids=[ORGANIZATION_ID], input_={'method': 'column_names', 'master': MASTER})
 
     print(task)
 
@@ -40,6 +42,11 @@ def main():
                 break
         except Exception as e:
             print(e)
+
+
+def print_result(result: List[any]):
+    for idx, r in enumerate(result):
+        print(f'{idx}: {r}')
 
 
 def get_task_result_id(task):
