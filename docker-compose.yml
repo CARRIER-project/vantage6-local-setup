@@ -44,6 +44,22 @@ services:
       - DATA_VOLUME_NAME=vantage6-local-setup_shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
+  umc_utrecht:
+    container_name: vantage6-umc_utrecht-user
+    depends_on:
+      - vserver
+
+    image: "harbor.vantage6.ai/infrastructure/node:latest"
+    command: "vnode-local start -c /mnt/config/umc_utrecht.yml --dockerized"
+    volumes:
+      - ./umc_utrecht.yml:/mnt/config/umc_utrecht.yml
+      - ./diabetes.csv:/mnt/database/database.csv
+      - /var/run/docker.sock:/var/run/docker.sock
+      - shared-volume:/mnt/data
+    environment:
+      - DATA_VOLUME_NAME=vantage6-local-setup_shared-volume
+      - DATABASE_URI=/mnt/database/database.csv
+
 volumes:
   shared-volume:
 

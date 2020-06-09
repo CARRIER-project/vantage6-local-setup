@@ -18,6 +18,7 @@ METHOD = 'column_names'
 COLLABORATION_ID = 1
 ORGANIZATION_ID = 1
 MASTER = False
+NUM_NODES = 2
 
 
 def main():
@@ -34,11 +35,11 @@ def main():
         print(f'Number of tries {i}')
         time.sleep(WAIT_TIME)
         try:
-            result = client.get_results(task_id=task['id'])[0]
-
-            if result['result']:
+            results = client.get_results(task_id=task['id'])
+            print(results)
+            if (len(results) == 2) and all(map(lambda x: x['complete'], results)):
                 print('\nReceived result:')
-                print(result['result'])
+                print_result(results)
                 break
         except Exception as e:
             print(e)
@@ -46,7 +47,7 @@ def main():
 
 def print_result(result: List[any]):
     for idx, r in enumerate(result):
-        print(f'{idx}: {r}')
+        print(f'{idx}: {r["result"]}')
 
 
 def get_task_result_id(task):

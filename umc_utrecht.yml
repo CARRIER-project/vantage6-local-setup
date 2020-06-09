@@ -1,0 +1,31 @@
+application:
+  api_key: "1cc7b5c0-aa32-11ea-afed-0242ac170003"
+  api_path: /api
+  databases:
+    default: /mnt/database/database.csv
+  encryption:
+    enabled: false
+  logging:
+    backup_count: 5
+    datefmt: '%Y-%m-%d %H:%M:%S'
+    file: fresh.log
+    format: '%(asctime)s - %(name)-14s - %(levelname)-8s - %(message)s'
+    level: DEBUG
+    max_size: 1024
+    use_console: true
+  port: '5000'
+  server_url: http://vserver
+  task_dir: /mnt/data
+environments:
+  acc: {
+    "node_volume_name": "vantage6-local-setup_shared-volume"
+  }
+  dev: {
+    "node_volume_name": "vantage6-local-setup_shared-volume"
+  }
+  prod: {
+    "node_volume_name": "vantage6-local-setup_shared-volume"
+  }
+  test: {
+    "node_volume_name":"vantage6-local-setup_shared-volume"
+  }
