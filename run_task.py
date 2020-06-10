@@ -3,7 +3,7 @@ from typing import List
 
 import vantage6.client as vtgclient
 
-USERNAME = 'admin_6'
+USERNAME = 'admin_3'
 PASSWORD = 'admin'
 
 POST = 'POST'
@@ -15,8 +15,8 @@ PORT = 5001
 
 IMAGE = 'localhost:5000/v6-carrier-py'
 METHOD = 'column_names'
-COLLABORATION_ID = 2
-ORGANIZATION_IDS = [4, 5]
+COLLABORATION_ID = 1
+ORGANIZATION_IDS = [1, 2]
 MASTER = False
 NUM_NODES = 2
 
@@ -27,7 +27,7 @@ def main():
     client.setup_encryption(None)
 
     task = client.post_task(name='Column names', image=IMAGE, collaboration_id=COLLABORATION_ID,
-                            organization_ids=ORGANIZATION_IDS, input_={'method': 'column_names', 'master': MASTER})
+                            organization_ids=ORGANIZATION_IDS, input_={'method': METHOD, 'master': MASTER})
 
     print(task)
 
