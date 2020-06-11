@@ -36,7 +36,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-volume:/mnt/data
     environment:
-      - DATA_VOLUME_NAME= vantage6-shared-volume
+      - DATA_VOLUME_NAME=vantage6-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
   umc_utrecht:
@@ -52,7 +52,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-volume:/mnt/data
     environment:
-      - DATA_VOLUME_NAME= vantage6-shared-volume
+      - DATA_VOLUME_NAME=vantage6-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
   cbs:
@@ -65,7 +65,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-volume:/mnt/data
     environment:
-      - DATA_VOLUME_NAME= vantage6-shared-volume
+      - DATA_VOLUME_NAME=vantage6-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
 
