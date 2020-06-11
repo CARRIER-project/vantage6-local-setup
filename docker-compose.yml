@@ -11,7 +11,8 @@ services:
       - 5433:5432
     volumes:
       - ./pgdata:/data
-#
+      - ./initial_db_data:/docker-entrypoint-initdb.d
+
 #  migrate:
 #    volumes:
 #      - ./migrations:/flyway/sql/
@@ -24,7 +25,7 @@ services:
       - db
     volumes:
       - ./server:/mnt/
-    command: "vserver-local start -c /mnt/config.yml"
+    command: vserver-local start -c /mnt/config.yml
     ports:
       - "5001:5000"
 
