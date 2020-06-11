@@ -1,1 +1,1 @@
-from .vantage_client import VantageClient
+from .vantage_client import *

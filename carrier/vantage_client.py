@@ -1,8 +1,12 @@
+import base64
+import json
 import pickle
 
 import requests
-import json
-import base64
+from vantage6.client import Client
+
+_HOST = 'http://localhost'
+_PORT = 5001
 
 HOST = 'localhost'
 PORT = 5001
@@ -14,7 +18,26 @@ POST = 'POST'
 DEFAULT_HEADERS = {'Content-Type': DEFAULT_CONTENT_TYPE}
 
 
+def get_official_client(username, password):
+    """
+    Get official vantage6 client.
+
+    :param username:
+    :param password:
+    :return:
+    """
+    client = Client(_HOST, _PORT)
+    client.authenticate(username, password)
+    client.setup_encryption(None)
+
+    return client
+
+
 class VantageClient():
+    """
+    Custom made vantage client to work around some problems the official has at the moment (such as authenticating root
+    users).
+    """
 
     def __init__(self, username, password):
         # Retrieve a authentication token
