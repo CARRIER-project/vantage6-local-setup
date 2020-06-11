@@ -16,9 +16,9 @@ PORT = 5001
 IMAGE = 'localhost:5000/v6-carrier-py'
 METHOD = 'column_names'
 COLLABORATION_ID = 1
-ORGANIZATION_IDS = [2, 3]
+ORGANIZATION_IDS = [2, 3, 6]
 MASTER = False
-NUM_NODES = 2
+NUM_NODES = 3
 
 
 def main():
@@ -38,7 +38,7 @@ def main():
         try:
             results = client.get_results(task_id=task['id'])
             print(results)
-            if ((len(results) == NUM_NODES) or MASTER) and all(map(lambda x: x['finished_at'], results)):
+            if ((len(results) >= NUM_NODES) or MASTER) and all(map(lambda x: x['finished_at'], results)):
                 print('\nReceived result:')
                 print_result(results)
                 break
