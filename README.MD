@@ -1,19 +1,7 @@
 # Vantage 6 local setup
 
-## If you're running for the first time
-```shell script
-# Run only vserver and database
-docker-compose up -d vserver
-
-# Setup organisation account and node
-python setup_vserver.py
-```
-The last command will register a new node on the server and display its information. Copy the string found for `api_key`.
-Now, open `mumc-node-config.yml` in your favorite editor and paste your copied api key after `api_key`. If there is
-already an api key there you can replace it.
-
 ## Running the local setup
-If you have already done the steps for first-time setup you can simply run:
+Simply run:
 ```shell script
 docker-compose up -d
 ```
