@@ -16,25 +16,40 @@ ORGANIZATION_BASE = ORGANIZATION = {'address1': 'my address 1, Amsterdam',
 
 @click.command()
 @click.argument('name')
-def create_node(name):
-    client = VantageClient(USERNAME, PASSWORD)
+@click.option('--org-id')
+@click.option('--username')
+@click.option('--password', default=ADMIN_PASSWORD)
+def create_node(name, org_id, username, password):
 
+    if not (org_id and username):
+
+        client = VantageClient(USERNAME, PASSWORD)
+
+    if not org_id:
+        print('Creating new organization')
+        org_id = create_organization(client, name)
+
+    if not username:
+        username = f'admin_{org_id}'
+        print(f'Creating new user {username}')
+        # Create user for organization
+        create_user(client, org_id, username)
+
+    # Create node
+    client = VantageClient(username, password)
+    result = client.post('node', {'collaboration_id': COLLABORATION_ID, 'organization_id': org_id})
+    api_key = result['api_key']
+
+    print(f'Created new node. Api key: {api_key}')
+
+
+def create_organization(client, name):
     # Create organization for node
     organization = dict(ORGANIZATION_BASE)
     organization['name'] = name
     result = client.post('organization', organization)
-    organization_id = result['id']
-
-    username = f'admin_{organization_id}'
-    # Create user for organization
-    create_user(client, organization_id, username)
-
-    # Create node
-    client = VantageClient(username, ADMIN_PASSWORD)
-    result = client.post('node', {'collaboration_id': COLLABORATION_ID, 'organization_id': organization_id})
-    api_key = result['api_key']
-
-    print(f'Created new node. Api key: {api_key}')
+    org_id = result['id']
+    return org_id
 
 
 def create_user(client, organization_id, username):
