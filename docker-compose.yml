@@ -34,9 +34,9 @@ services:
       - ./mumc/mumc-node-config.yml:/mnt/config/mumc.yml
       - ./mumc/20200402_random_dms.csv:/mnt/database/database.csv
       - /var/run/docker.sock:/var/run/docker.sock
-      - shared-volume:/mnt/data
+      - mumc-shared-volume:/mnt/data
     environment:
-      - DATA_VOLUME_NAME=vantage6-shared-volume
+      - DATA_VOLUME_NAME=mumc-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
   umc_utrecht:
@@ -50,9 +50,9 @@ services:
       - ./umc_utrecht/umc_utrecht.yml:/mnt/config/umc_utrecht.yml
       - ./diabetes.csv:/mnt/database/database.csv
       - /var/run/docker.sock:/var/run/docker.sock
-      - shared-volume:/mnt/data
+      - umcutrecht-shared-volume:/mnt/data
     environment:
-      - DATA_VOLUME_NAME=vantage6-shared-volume
+      - DATA_VOLUME_NAME=umcutrecht-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
   cbs:
@@ -63,15 +63,19 @@ services:
       - ./cbs/cbs-node-config.yml:/mnt/config/cbs.yml
       - ./cbs/20200511_sample_cbs.csv:/mnt/database/database.csv
       - /var/run/docker.sock:/var/run/docker.sock
-      - shared-volume:/mnt/data
+      - cbs-shared-volume:/mnt/data
     environment:
-      - DATA_VOLUME_NAME=vantage6-shared-volume
+      - DATA_VOLUME_NAME=cbs-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
 
 volumes:
-  shared-volume:
-      name: vantage6-shared-volume
+  cbs-shared-volume:
+    name: cbs-shared-volume
+  umcutrecht-shared-volume:
+    name: umcutrecht-shared-volume
+  mumc-shared-volume:
+    name: mumc-shared-volume
 
 #
 #  registry:
