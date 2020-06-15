@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import time
 from typing import List
 
@@ -16,8 +18,8 @@ PORT = 5001
 IMAGE = 'localhost:5000/v6-carrier-py'
 METHOD = 'column_names'
 COLLABORATION_ID = 1
-ORGANIZATION_IDS = [2, 3, 6]
-MASTER = False
+ORGANIZATION_IDS = [1] #[2, 3, 6]
+MASTER = True
 NUM_NODES = 3
 
 
