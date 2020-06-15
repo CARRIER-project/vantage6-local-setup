@@ -71,10 +71,11 @@ services:
   escience:
     container_name: vantage6-escience-user
     image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/cbs.yml --dockerized"
+    command: "vnode-local start -c /mnt/config/escience.yml --dockerized"
     volumes:
-      - ./nodes/escience/escience-node-config.yml:/mnt/config/cbs.yml
+      - ./nodes/escience/escience-node-config.yml:/mnt/config/escience.yml
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./nodes/escience/data.csv:/mnt/database/database.csv
       - escience-shared-volume:/mnt/data
     environment:
       - DATA_VOLUME_NAME=escience-shared-volume
