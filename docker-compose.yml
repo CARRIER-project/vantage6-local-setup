@@ -68,6 +68,18 @@ services:
       - DATA_VOLUME_NAME=cbs-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
+  escience:
+    container_name: vantage6-escience-user
+    image: "harbor.vantage6.ai/infrastructure/node:latest"
+    command: "vnode-local start -c /mnt/config/cbs.yml --dockerized"
+    volumes:
+      - ./nodes/escience/escience-node-config.yml:/mnt/config/cbs.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - escience-shared-volume:/mnt/data
+    environment:
+      - DATA_VOLUME_NAME=escience-shared-volume
+      - DATABASE_URI=/mnt/database/database.csv
+
 
 volumes:
   cbs-shared-volume:
@@ -76,6 +88,8 @@ volumes:
     name: umcutrecht-shared-volume
   mumc-shared-volume:
     name: mumc-shared-volume
+  escience-shared-volume:
+    name: escience-shared-volume
 
 #
 #  registry:
