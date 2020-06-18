@@ -3,6 +3,7 @@
 import time
 from typing import List
 
+import pandas as pd
 import vantage6.client as vtgclient
 
 USERNAME = 'admin'
@@ -16,11 +17,11 @@ HOST = 'http://localhost'
 PORT = 5001
 
 IMAGE = 'localhost:5000/v6-carrier-py'
-METHOD = 'column_names'
+METHOD = 'correlation_matrix'
 COLLABORATION_ID = 1
-ORGANIZATION_IDS = [1] #[2, 3, 6]
+ORGANIZATION_IDS = [1]  # [2, 3, 6]
 MASTER = True
-NUM_NODES = 3
+NUM_NODES = 1
 
 
 def main():
@@ -28,11 +29,12 @@ def main():
     client.authenticate(USERNAME, PASSWORD)
     client.setup_encryption(None)
 
-    task = client.post_task(name='Column names', image=IMAGE, collaboration_id=COLLABORATION_ID,
+    task = client.post_task(name=METHOD, image=IMAGE, collaboration_id=COLLABORATION_ID,
                             organization_ids=ORGANIZATION_IDS,
-                            input_={'method': METHOD, 'master': MASTER})
+                            input_={'method': METHOD, 'master': MASTER, 'kwargs': {'exclude_orgs': ORGANIZATION_IDS}})
 
     print(task)
+    results = []
 
     for i in range(RETRIES):
         print(f'Number of tries {i}')
@@ -40,17 +42,29 @@ def main():
         try:
             results = client.get_results(task_id=task['id'])
             print(results)
-            if ((len(results) >= NUM_NODES) or MASTER) and all(map(lambda x: x['finished_at'], results)):
+            if ((len(results) > 0) or MASTER) and all(map(lambda x: x['finished_at'], results)):
                 print('\nReceived result:')
                 print_result(results)
                 break
         except Exception as e:
             print(e)
 
+    print_logs(results)
+
+
+def print_logs(results):
+    for r in results:
+        print(f'Log for organization {r["organization"]["id"]}')
+        print(r['log'])
+
 
 def print_result(result: List[any]):
     for idx, r in enumerate(result):
-        print(f'{idx}: {r["result"]}')
+        result_data = r['result']
+        if isinstance(result_data, pd.DataFrame):
+            print(f'{idx}:\n{result_data.to_string()}')
+        else:
+            print(f'{idx}: {result_data}')
 
 
 def get_task_result_id(task):
