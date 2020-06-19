@@ -299,9 +299,6 @@ ALTER TABLE ONLY public.task ALTER COLUMN id SET DEFAULT nextval('public.task_id
 
 COPY public."Member" (organization_id, collaboration_id) FROM stdin;
 1	1
-2	1
-3	1
-6	1
 \.
 
 
@@ -335,9 +332,6 @@ COPY public.collaboration (id, name, encrypted) FROM stdin;
 --
 
 COPY public.node (id, name, api_key, collaboration_id, organization_id) FROM stdin;
-5	organization for node 0 - collab1 Node	fd21ca66-abe5-11ea-a5c2-0242ac1c0003	1	2
-6	organization for node 1 - collab1 Node	fd44b292-abe5-11ea-a5c2-0242ac1c0003	1	3
-8	cbs - collab1 Node	37281654-abf3-11ea-9579-0242c0a84004	1	6
 7	NLEsC - collab1 Node	56b97dd2-aefa-11ea-a535-0242ac130005	1	1
 \.
 
@@ -348,9 +342,6 @@ COPY public.node (id, name, api_key, collaboration_id, organization_id) FROM std
 
 COPY public.organization (id, name, domain, address1, address2, zipcode, country, _public_key) FROM stdin;
 1	NLEsC	\N	my address 1, Amsterdam	\N	1234ab	the Netherlands	\\x
-2	organization for node 0	\N	my address 1, Amsterdam	\N	1234ab	the Netherlands	\\x
-3	organization for node 1	\N	my address 1, Amsterdam	\N	1234ab	the Netherlands	\\x
-6	organization for cbs node	\N	my address 1, Amsterdam	\N	1234ab	the Netherlands	\\x
 \.
 
 
