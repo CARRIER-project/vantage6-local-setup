@@ -17,10 +17,10 @@ HOST = 'http://localhost'
 PORT = 5001
 
 IMAGE = 'localhost:5000/v6-carrier-py'
-METHOD = 'correlation_matrix'
+METHOD = 'get_printable_graph'
 COLLABORATION_ID = 1
 ORGANIZATION_IDS = [1]  # [2, 3, 6]
-MASTER = True
+MASTER = False
 NUM_NODES = 1
 
 

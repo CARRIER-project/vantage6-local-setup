@@ -23,51 +23,6 @@ services:
     ports:
       - "5001:5000"
 
-  mumc:
-    container_name: vantage6-mumc-user
-    depends_on:
-      - vserver
-
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/mumc.yml --dockerized"
-    volumes:
-      - ./nodes/mumc/mumc-node-config.yml:/mnt/config/mumc.yml
-      - ./nodes/mumc/20200402_random_dms.csv:/mnt/database/database.csv
-      - /var/run/docker.sock:/var/run/docker.sock
-      - mumc-shared-volume:/mnt/data
-    environment:
-      - DATA_VOLUME_NAME=mumc-shared-volume
-      - DATABASE_URI=/mnt/database/database.csv
-
-  umc_utrecht:
-    container_name: vantage6-umc_utrecht-user
-    depends_on:
-      - vserver
-
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/umc_utrecht.yml --dockerized"
-    volumes:
-      - ./nodes/umc_utrecht/umc_utrecht.yml:/mnt/config/umc_utrecht.yml
-      - ./nodes/umc_utrecht/20200402_random_dms.csv:/mnt/database/database.csv
-      - /var/run/docker.sock:/var/run/docker.sock
-      - umcutrecht-shared-volume:/mnt/data
-    environment:
-      - DATA_VOLUME_NAME=umcutrecht-shared-volume
-      - DATABASE_URI=/mnt/database/database.csv
-
-  cbs:
-    container_name: vantage6-cbs-user
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/cbs.yml --dockerized"
-    volumes:
-      - ./nodes/cbs/cbs-node-config.yml:/mnt/config/cbs.yml
-      - ./nodes/cbs/20200511_sample_cbs.csv:/mnt/database/database.csv
-      - /var/run/docker.sock:/var/run/docker.sock
-      - cbs-shared-volume:/mnt/data
-    environment:
-      - DATA_VOLUME_NAME=cbs-shared-volume
-      - DATABASE_URI=/mnt/database/database.csv
-
   escience:
     container_name: vantage6-escience-user
     image: "harbor.vantage6.ai/infrastructure/node:latest"
@@ -75,20 +30,14 @@ services:
     volumes:
       - ./nodes/escience/escience-node-config.yml:/mnt/config/escience.yml
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./nodes/escience/data.csv:/mnt/database/database.csv
+      - ./nodes/escience/boston-sample-data.ttl:/mnt/database/database.ttl
       - escience-shared-volume:/mnt/data
     environment:
       - DATA_VOLUME_NAME=escience-shared-volume
-      - DATABASE_URI=/mnt/database/database.csv
+      - DATABASE_URI=/mnt/database/database.ttl
 
 
 volumes:
-  cbs-shared-volume:
-    name: cbs-shared-volume
-  umcutrecht-shared-volume:
-    name: umcutrecht-shared-volume
-  mumc-shared-volume:
-    name: mumc-shared-volume
   escience-shared-volume:
     name: escience-shared-volume
 
