@@ -1,0 +1,6 @@
+@prefix db: <http://dbpedia.org/resource/>
+
+db:Massachusetts db:Governor db:Deval_Patrick;
+                 db:Nickname "Bay State";
+                 db:Capital db:Boston.
+db:Boston        db:Nickname "Beantown".

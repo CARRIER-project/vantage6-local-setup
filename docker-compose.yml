@@ -75,7 +75,7 @@ services:
     volumes:
       - ./nodes/escience/escience-node-config.yml:/mnt/config/escience.yml
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./nodes/escience/data.csv:/mnt/database/database.csv
+      - ./nodes/escience/boston-sample-data.ttl:/mnt/database/database.csv
       - escience-shared-volume:/mnt/data
     environment:
       - DATA_VOLUME_NAME=escience-shared-volume
