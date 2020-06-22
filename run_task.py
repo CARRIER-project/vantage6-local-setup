@@ -3,46 +3,84 @@
 import time
 from typing import List
 
+import click
 import pandas as pd
 import vantage6.client as vtgclient
 
-USERNAME = 'admin'
-PASSWORD = 'admin'
+DEFAULT_USERNAME = 'admin'
+DEFAULT_PASSWORD = 'admin'
 
-POST = 'POST'
-WAIT_TIME = 1
-RETRIES = 20
+DEFAULT_WAIT_TIME = 1
+DEFAULT_NUM_RETRIES = 20
 
-HOST = 'http://localhost'
-PORT = 5001
+DEFAULT_HOST = 'http://localhost'
+DEFAULT_PORT = 5001
 
-IMAGE = 'localhost:5000/v6-carrier-py'
-METHOD = 'correlation_matrix'
-COLLABORATION_ID = 1
-ORGANIZATION_IDS = [1]  # [2, 3, 6]
-MASTER = True
-NUM_NODES = 1
+DEFAULT_IMAGE = 'localhost:5000/v6-carrier-py'
+DEFAULT_METHOD = 'correlation_matrix'
+DEFAULT_COLLABORATION_ID = '1'
+DEFAULT_ORGANIZATION_IDS = '1'
 
 
-def main():
-    client = vtgclient.Client(HOST, PORT)
-    client.authenticate(USERNAME, PASSWORD)
+@click.command(context_settings={'ignore_unknown_options': True,
+                                 'allow_extra_args': True},
+               help='Run a task on vantage6 nodes. Optionally pass extra'
+                    'keyword arguments to be passed to the algorithm'
+                    '(i.e. "--key value")')
+@click.option('--method', default=DEFAULT_METHOD,
+              help='Method to run')
+@click.option('--image', default=DEFAULT_IMAGE,
+              help='Docker image to run')
+@click.option('--collaboration_id', default=DEFAULT_COLLABORATION_ID,
+              help='Identifier for collaboration to run task with', type=int)
+@click.option('--organization_ids', default=DEFAULT_ORGANIZATION_IDS,
+              help='Identifier for organization ids that should run task, '
+                   'pass as comma-separated string ("1,2")')
+@click.option('--username', default=DEFAULT_USERNAME)
+@click.option('--password', default=DEFAULT_PASSWORD)
+@click.option('--host', default=DEFAULT_HOST,
+              help='Host for vantage6 server')
+@click.option('--port', default=DEFAULT_PORT, type=int,
+              help='Port of vantage6 server')
+@click.option('--wait_time', default=DEFAULT_WAIT_TIME, type=int,
+              help='Time in seconds to wait in between polling tries')
+@click.option('--num_retries', default=DEFAULT_NUM_RETRIES, type=int,
+              help='Number of retries for polling task results')
+@click.option('--master/--rpc', default=True,
+              help='Whether to run master or RPC algorithm')
+@click.pass_context
+def main(context, method: str, image: str, collaboration_id: int,
+         organization_ids: str, master: bool, username: str, password: str,
+         host: str, port: int, wait_time: int, num_retries: int):
+    # context.args collects unkown arguments in a list:
+    # (['--unknown_var', 'value3', '--unknown_var2', 'value4'])
+    kwargs = {context.args[i][2:]: context.args[i + 1]
+              for i in range(0, len(context.args), 2)}
+
+    organization_ids = [int(organization_id) for organization_id in organization_ids.split(',')]
+
+    client = vtgclient.Client(host, port)
+    client.authenticate(username, password)
     client.setup_encryption(None)
 
-    task = client.post_task(name=METHOD, image=IMAGE, collaboration_id=COLLABORATION_ID,
-                            organization_ids=ORGANIZATION_IDS,
-                            input_={'method': METHOD, 'master': MASTER, 'kwargs': {'exclude_orgs': ORGANIZATION_IDS}})
+    task = client.post_task(name=method,
+                            image=image,
+                            collaboration_id=collaboration_id,
+                            organization_ids=organization_ids,
+                            input_={'method': method,
+                                    'master': master,
+                                    'kwargs': kwargs})
 
     print(task)
     results = []
 
-    for i in range(RETRIES):
+    for i in range(num_retries - 1):
         print(f'Number of tries {i}')
-        time.sleep(WAIT_TIME)
+        time.sleep(wait_time)
         try:
             results = client.get_results(task_id=task['id'])
             print(results)
-            if ((len(results) > 0) or MASTER) and all(map(lambda x: x['finished_at'], results)):
+            if ((len(results) > 0) or master) and all(map(lambda x: x['finished_at'], results)):
                 print('\nReceived result:')
                 print_result(results)
                 break
