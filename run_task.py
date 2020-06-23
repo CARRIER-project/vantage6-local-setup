@@ -11,7 +11,7 @@ DEFAULT_USERNAME = 'admin'
 DEFAULT_PASSWORD = 'admin'
 
 DEFAULT_WAIT_TIME = 1
-DEFAULT_NUM_RETRIES = 20
+DEFAULT_NUM_TRIES = 20
 
 DEFAULT_HOST = 'http://localhost'
 DEFAULT_PORT = 5001
@@ -44,8 +44,8 @@ DEFAULT_ORGANIZATION_IDS = '1'
               help='Port of vantage6 server')
 @click.option('--wait_time', default=DEFAULT_WAIT_TIME, type=int,
               help='Time in seconds to wait in between polling tries')
-@click.option('--num_retries', default=DEFAULT_NUM_RETRIES, type=int,
-              help='Number of retries for polling task results')
+@click.option('--num_tries', default=DEFAULT_NUM_TRIES, type=int,
+              help='Number of tries for polling task results')
 # Will be true if called with --master, false if called with --rpc
 @click.option('--master/--rpc', default=True,
               help='--master will run a master algorithm'
@@ -53,7 +53,7 @@ DEFAULT_ORGANIZATION_IDS = '1'
 @click.pass_context
 def main(context, method: str, image: str, collaboration_id: int,
          organization_ids: str, master: bool, username: str, password: str,
-         host: str, port: int, wait_time: int, num_retries: int):
+         host: str, port: int, wait_time: int, num_tries: int):
     # context.args collects unkown arguments in a list:
     # (['--unknown_var', 'value3', '--unknown_var2', 'value4'])
     kwargs = {context.args[i][2:]: context.args[i + 1]
@@ -76,8 +76,8 @@ def main(context, method: str, image: str, collaboration_id: int,
     print(task)
     results = []
 
-    for i in range(num_retries - 1):
-        print(f'Number of tries {i}')
+    for i in range(num_tries):
+        print(f'Number of tries: {i}')
         time.sleep(wait_time)
         try:
             results = client.get_results(task_id=task['id'])
