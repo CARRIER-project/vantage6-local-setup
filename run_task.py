@@ -46,8 +46,10 @@ DEFAULT_ORGANIZATION_IDS = '1'
               help='Time in seconds to wait in between polling tries')
 @click.option('--num_retries', default=DEFAULT_NUM_RETRIES, type=int,
               help='Number of retries for polling task results')
+# Will be true if called with --master, false if called with --rpc
 @click.option('--master/--rpc', default=True,
-              help='Whether to run master or RPC algorithm')
+              help='--master will run a master algorithm'
+                   '--rpc will run a RPC algorithm')
 @click.pass_context
 def main(context, method: str, image: str, collaboration_id: int,
          organization_ids: str, master: bool, username: str, password: str,
