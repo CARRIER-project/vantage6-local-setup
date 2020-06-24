@@ -27,3 +27,8 @@ Make sure this task is published to the local registry by running `push_to_local
 ```
 python run_task.py
 ```
+
+To run the sample_sparqle_query method:
+```
+python run_task.py --rpc --method 'sample_sparqle_query'
+```
