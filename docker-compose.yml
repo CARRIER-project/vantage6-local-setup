@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 services:
   db:
     image: postgres
@@ -27,12 +27,15 @@ services:
     image: "jvsoest/graphdb-free:fairstation"
     ports:
       - "7200:7200"
+    networks:
+      - vantage6-escience-user-net
 
   escience:
+    # We are not specifying a network, but the node container will automatically
+    # connect to vantage6-escience-user-net, thereby the node and algorithm
+    # container have acces to the rdf store on this network.
     container_name: vantage6-escience-user
     image: "harbor.vantage6.ai/infrastructure/node:latest"
-    depends_on:
-      - rdfstore
     command: "vnode-local start -c /mnt/config/escience.yml --dockerized"
     volumes:
       - ./nodes/escience/escience-node-config.yml:/mnt/config/escience.yml
@@ -40,13 +43,15 @@ services:
       - escience-shared-volume:/mnt/data
     environment:
       - DATA_VOLUME_NAME=escience-shared-volume
-      - DATABASE_URI=/mnt/database/database.ttl
-
+      - DATABASE_URI=http://rdfstore:7200/repositories/repo1
 
 volumes:
   escience-shared-volume:
     name: escience-shared-volume
 
+networks:
+  vantage6-escience-user-net:
+    name: vantage6-escience-user-net
 #
 #  registry:
 #    image: registry:2
