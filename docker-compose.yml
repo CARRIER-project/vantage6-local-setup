@@ -81,6 +81,14 @@ services:
       - DATA_VOLUME_NAME=escience-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
+  jupyter:
+    image: "jupyter/base-notebook"
+    volumes:
+      - ./requirements.txt:/app/requirements.txt
+      - ./jupyter/before_start.sh:/usr/local/bin/before-notebook.d/before_start.sh
+      - ./:/home/jovyan/app
+    ports:
+      - 8888:8888
 
 volumes:
   cbs-shared-volume:
