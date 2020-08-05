@@ -27,5 +27,5 @@ Make sure this task is published to the local registry by running `push_to_local
 python run_task.py
 ```
 ## Using the `test_federated_learning.ipynb` notebook
-If you run docker-compose up docerk will automatically spin up a jupyter notebook server for you. You can use the
+If you run docker-compose up docker will automatically spin up a jupyter notebook server for you. You can use the
 `test_federated_learning.ipynb` notebook to run test tasks. You can grab the token from the docker-compose output.
