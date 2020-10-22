@@ -3,4 +3,5 @@ venv/
 pgdata/
 __pycache__/
 .ipynb_checkpoints/
-jovyan/.env
+jovyan/
+.env

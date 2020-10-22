@@ -39,20 +39,20 @@ services:
       - DATA_VOLUME_NAME=mumc-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
-  umc_utrecht:
-    container_name: vantage6-umc_utrecht-user
+  gp_organization:
+    container_name: vantage6-gp_organization-user
     depends_on:
       - vserver
 
     image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/umc_utrecht.yml --dockerized"
+    command: "vnode-local start -c /mnt/config/gp_organization.yml --dockerized"
     volumes:
-      - ./nodes/umc_utrecht/umc_utrecht.yml:/mnt/config/umc_utrecht.yml
-      - ./nodes/umc_utrecht/20200402_random_dms.csv:/mnt/database/database.csv
+      - ./nodes/gp_organization/gp_organization.yml:/mnt/config/gp_organization.yml
+      - ./nodes/gp_organization/20200402_random_dms.csv:/mnt/database/database.csv
       - /var/run/docker.sock:/var/run/docker.sock
-      - umcutrecht-shared-volume:/mnt/data
+      - gp_organization-shared-volume:/mnt/data
     environment:
-      - DATA_VOLUME_NAME=umcutrecht-shared-volume
+      - DATA_VOLUME_NAME=gp_organization-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
   cbs:
@@ -93,8 +93,8 @@ services:
 volumes:
   cbs-shared-volume:
     name: cbs-shared-volume
-  umcutrecht-shared-volume:
-    name: umcutrecht-shared-volume
+  gp_organization-shared-volume:
+    name: gp_organization-shared-volume
   mumc-shared-volume:
     name: mumc-shared-volume
   escience-shared-volume:
