@@ -55,6 +55,26 @@ services:
       - DATA_VOLUME_NAME=gp_organization-shared-volume
       - DATABASE_URI=/mnt/database/database.csv
 
+  gp-triplestore:
+    image: djoerzilla/graphdb-free
+    ports:
+      - 7200:7200
+    volumes:
+      - ./triplestores/gp_organization:/mnt/config
+
+  gp-migrate:
+    image: curlimages/curl
+    depends_on:
+      - gp-triplestore
+    volumes:
+      - ./triplestores/gp_organization:/data/
+    working_dir: /data
+    command:  ["./load_data.sh"]
+    restart: "on-failure"
+    environment:
+      - TRIPLESTORE_HOST=gp-triplestore
+      - REPOSITORY=gp-organization
+
   cbs:
     container_name: vantage6-cbs-user
     image: "harbor.vantage6.ai/infrastructure/node:latest"
