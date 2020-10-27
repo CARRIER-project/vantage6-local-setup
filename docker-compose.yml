@@ -53,14 +53,15 @@ services:
       - gp_organization-shared-volume:/mnt/data
     environment:
       - DATA_VOLUME_NAME=gp_organization-shared-volume
-      - DATABASE_URI=/mnt/database/database.csv
-
+      - DATABASE_URI=http://gp-triplestore:7200/repositories/gp-organization
   gp-triplestore:
     image: djoerzilla/graphdb-free
     ports:
       - 7200:7200
     volumes:
       - ./triplestores/gp_organization:/mnt/config
+    networks:
+      -  gp-algorithm-net
 
   gp-migrate:
     image: curlimages/curl
@@ -74,6 +75,8 @@ services:
     environment:
       - TRIPLESTORE_HOST=gp-triplestore
       - REPOSITORY=gp-organization
+    networks:
+      - gp-algorithm-net
 
   cbs:
     container_name: vantage6-cbs-user
@@ -119,6 +122,11 @@ volumes:
     name: mumc-shared-volume
   escience-shared-volume:
     name: escience-shared-volume
+
+networks:
+  gp-algorithm-net:
+    external:
+      name: vantage6-gp_organization-user-net
 
 #
 #  registry:
