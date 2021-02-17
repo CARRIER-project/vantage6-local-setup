@@ -14,7 +14,7 @@ services:
       - ./initial_db_data:/docker-entrypoint-initdb.d
 
   vserver:
-    image: "harbor.vantage6.ai/infrastructure/server:latest"
+    image: "harbor.vantage6.ai/infrastructure/server:2.0.0a3"
     depends_on:
       - db
     volumes:
