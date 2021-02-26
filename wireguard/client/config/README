@@ -1,0 +1,1 @@
+This directory must contain the wireguard config file for this peer. Please rename it to wg0.conf before putting it in here.
