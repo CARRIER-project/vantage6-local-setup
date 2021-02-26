@@ -6,3 +6,5 @@ __pycache__/
 jovyan/
 .env
 node_rsa
+wireguard/client/config/
+wireguard/server/config/

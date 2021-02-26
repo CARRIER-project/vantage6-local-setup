@@ -1,0 +1,1 @@
+This directory needs to be here before spinning up the server. It will put its config (and peer config) files in here when started for the first time.
