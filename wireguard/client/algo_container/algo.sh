@@ -16,7 +16,10 @@ ip route
 
 echo "Ping:"
 
-ping -c 5 -i 1 10.13.13.1
-ping -c 5 -i 1 10.13.13.2
-ping -c 5 -i 1 10.13.13.3
-ping -c 5 -i 1 10.13.13.4
+while true
+do
+  ping -c 5 -i 1 10.13.13.1
+  ping -c 5 -i 1 10.13.13.2
+  ping -c 5 -i 1 10.13.13.3
+  ping -c 5 -i 1 10.13.13.4
+done
