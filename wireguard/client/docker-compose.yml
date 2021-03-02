@@ -1,8 +1,8 @@
 version: "2.1"
 services:
-  client_algo:
-    image: ghcr.io/linuxserver/wireguard
-    container_name: client_algo
+  algo:
+    build: algo_container/.
+    container_name: algo
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
