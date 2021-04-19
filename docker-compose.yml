@@ -9,12 +9,9 @@ services:
       - "PGDATA=/data"
     ports:
       - 5433:5432
-    volumes:
-      - ./pgdata:/data
-      - ./initial_db_data:/docker-entrypoint-initdb.d
 
   vserver:
-    image: "harbor.vantage6.ai/infrastructure/server:2.0.0a3"
+    image: "harbor2.vantage6.ai/infrastructure/server"
     depends_on:
       - db
     volumes:
@@ -28,7 +25,7 @@ services:
     depends_on:
       - vserver
 
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
+    image: "harbor2.vantage6.ai/infrastructure/node"
     command: "vnode-local start -c /mnt/config/mumc.yml --dockerized"
     volumes:
       - ./nodes/mumc/mumc-node-config.yml:/mnt/config/mumc.yml
@@ -43,8 +40,7 @@ services:
     container_name: vantage6-gp_organization-user
     depends_on:
       - vserver
-
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
+    image: "harbor2.vantage6.ai/infrastructure/node"
     command: "vnode-local start -c /mnt/config/gp_organization.yml --dockerized"
     volumes:
       - ./nodes/gp_organization/gp_organization.yml:/mnt/config/gp_organization.yml
@@ -60,8 +56,6 @@ services:
       - 7200:7200
     volumes:
       - ./triplestores/gp_organization:/mnt/config
-    networks:
-      -  gp-algorithm-net
 
   gp-migrate:
     image: curlimages/curl
@@ -75,12 +69,10 @@ services:
     environment:
       - TRIPLESTORE_HOST=gp-triplestore
       - REPOSITORY=gp-organization
-    networks:
-      - gp-algorithm-net
 
   cbs:
     container_name: vantage6-cbs-user
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
+    image: "harbor2.vantage6.ai/infrastructure/node"
     command: "vnode-local start -c /mnt/config/cbs.yml --dockerized"
     volumes:
       - ./nodes/cbs/cbs-node-config.yml:/mnt/config/cbs.yml
@@ -93,7 +85,7 @@ services:
 
   escience:
     container_name: vantage6-escience-user
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
+    image: "harbor2.vantage6.ai/infrastructure/node"
     command: "vnode-local start -c /mnt/config/escience.yml --dockerized"
     volumes:
       - ./nodes/escience/escience-node-config.yml:/mnt/config/escience.yml
@@ -122,14 +114,3 @@ volumes:
     name: mumc-shared-volume
   escience-shared-volume:
     name: escience-shared-volume
-
-networks:
-  gp-algorithm-net:
-    external:
-      name: vantage6-gp_organization-user-net
-
-#
-#  registry:
-#    image: registry:2
-#    ports:
-#      - 5001:5000
