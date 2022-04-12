@@ -1,3 +1,5 @@
+DISCLAIMER: This setup is outdated. It is inadvisable to run the docker-compose setup because it is incomplete.
+
 # Vantage 6 local setup
 
 ## Running the local setup
