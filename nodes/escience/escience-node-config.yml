@@ -1,5 +1,5 @@
 application:
-  api_key: "56b97dd2-aefa-11ea-a535-0242ac130005"
+  api_key: "f22995bc-a27f-11eb-bd24-0242ac120007"
   api_path: /api
   databases:
     default: /mnt/database/database.csv

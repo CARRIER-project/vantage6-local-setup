@@ -9,9 +9,11 @@ services:
       - "PGDATA=/data"
     ports:
       - 5433:5432
+    volumes:
+      - ./pgdata:/data
 
   vserver:
-    image: "harbor2.vantage6.ai/infrastructure/server"
+    image: "harbor2.vantage6.ai/infrastructure/server:harukas"
     depends_on:
       - db
     volumes:
@@ -25,7 +27,7 @@ services:
     depends_on:
       - vserver
 
-    image: "harbor2.vantage6.ai/infrastructure/node"
+    image: "harbor2.vantage6.ai/infrastructure/node:harukas"
     command: "vnode-local start -c /mnt/config/mumc.yml --dockerized"
     volumes:
       - ./nodes/mumc/mumc-node-config.yml:/mnt/config/mumc.yml
@@ -40,7 +42,7 @@ services:
     container_name: vantage6-gp_organization-user
     depends_on:
       - vserver
-    image: "harbor2.vantage6.ai/infrastructure/node"
+    image: "harbor2.vantage6.ai/infrastructure/node:harukas"
     command: "vnode-local start -c /mnt/config/gp_organization.yml --dockerized"
     volumes:
       - ./nodes/gp_organization/gp_organization.yml:/mnt/config/gp_organization.yml
@@ -72,7 +74,7 @@ services:
 
   cbs:
     container_name: vantage6-cbs-user
-    image: "harbor2.vantage6.ai/infrastructure/node"
+    image: "harbor2.vantage6.ai/infrastructure/node:harukas"
     command: "vnode-local start -c /mnt/config/cbs.yml --dockerized"
     volumes:
       - ./nodes/cbs/cbs-node-config.yml:/mnt/config/cbs.yml
@@ -85,7 +87,7 @@ services:
 
   escience:
     container_name: vantage6-escience-user
-    image: "harbor2.vantage6.ai/infrastructure/node"
+    image: "harbor2.vantage6.ai/infrastructure/node:harukas"
     command: "vnode-local start -c /mnt/config/escience.yml --dockerized"
     volumes:
       - ./nodes/escience/escience-node-config.yml:/mnt/config/escience.yml
