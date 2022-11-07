@@ -8,3 +8,4 @@ jovyan/
 node_rsa
 wireguard/client/config/
 wireguard/server/config/
+nodes/api_keys

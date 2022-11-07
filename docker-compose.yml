@@ -11,10 +11,9 @@ services:
       - 5433:5432
     volumes:
       - ./pgdata:/data
-      - ./initial_db_data:/docker-entrypoint-initdb.d
 
   vserver:
-    image: "harbor.vantage6.ai/infrastructure/server:2.0.0a3"
+    image: "harbor2.vantage6.ai/infrastructure/server:petronas"
     depends_on:
       - db
     volumes:
@@ -23,113 +22,11 @@ services:
     ports:
       - "5001:5000"
 
-  mumc:
-    container_name: vantage6-mumc-user
+  gui:
+    image: harbor2.vantage6.ai/infrastructure/ui
     depends_on:
       - vserver
-
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/mumc.yml --dockerized"
-    volumes:
-      - ./nodes/mumc/mumc-node-config.yml:/mnt/config/mumc.yml
-      - ./nodes/mumc/20200402_random_dms.csv:/mnt/database/database.csv
-      - /var/run/docker.sock:/var/run/docker.sock
-      - mumc-shared-volume:/mnt/data
-    environment:
-      - DATA_VOLUME_NAME=mumc-shared-volume
-      - DATABASE_URI=/mnt/database/database.csv
-
-  gp_organization:
-    container_name: vantage6-gp_organization-user
-    depends_on:
-      - vserver
-
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/gp_organization.yml --dockerized"
-    volumes:
-      - ./nodes/gp_organization/gp_organization.yml:/mnt/config/gp_organization.yml
-      - ./nodes/gp_organization/20200402_random_dms.csv:/mnt/database/database.csv
-      - /var/run/docker.sock:/var/run/docker.sock
-      - gp_organization-shared-volume:/mnt/data
-    environment:
-      - DATA_VOLUME_NAME=gp_organization-shared-volume
-      - DATABASE_URI=http://gp-triplestore:7200/repositories/gp-organization
-  gp-triplestore:
-    image: djoerzilla/graphdb-free
     ports:
-      - 7200:7200
-    volumes:
-      - ./triplestores/gp_organization:/mnt/config
-    networks:
-      -  gp-algorithm-net
-
-  gp-migrate:
-    image: curlimages/curl
-    depends_on:
-      - gp-triplestore
-    volumes:
-      - ./triplestores/gp_organization:/data/
-    working_dir: /data
-    command:  ["./load_data.sh"]
-    restart: "on-failure"
+      - "8080:80"
     environment:
-      - TRIPLESTORE_HOST=gp-triplestore
-      - REPOSITORY=gp-organization
-    networks:
-      - gp-algorithm-net
-
-  cbs:
-    container_name: vantage6-cbs-user
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/cbs.yml --dockerized"
-    volumes:
-      - ./nodes/cbs/cbs-node-config.yml:/mnt/config/cbs.yml
-      - ./nodes/cbs/20200511_sample_cbs.csv:/mnt/database/database.csv
-      - /var/run/docker.sock:/var/run/docker.sock
-      - cbs-shared-volume:/mnt/data
-    environment:
-      - DATA_VOLUME_NAME=cbs-shared-volume
-      - DATABASE_URI=/mnt/database/database.csv
-
-  escience:
-    container_name: vantage6-escience-user
-    image: "harbor.vantage6.ai/infrastructure/node:latest"
-    command: "vnode-local start -c /mnt/config/escience.yml --dockerized"
-    volumes:
-      - ./nodes/escience/escience-node-config.yml:/mnt/config/escience.yml
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./nodes/escience/data.csv:/mnt/database/database.csv
-      - escience-shared-volume:/mnt/data
-    environment:
-      - DATA_VOLUME_NAME=escience-shared-volume
-      - DATABASE_URI=/mnt/database/database.csv
-
-  jupyter:
-    image: "jupyter/minimal-notebook"
-    volumes:
-      - ./requirements.txt:/app/requirements.txt
-      - ./jupyter/before_start.sh:/usr/local/bin/before-notebook.d/before_start.sh
-      - ./:/home/jovyan/app
-    ports:
-      - 8888:8888
-
-volumes:
-  cbs-shared-volume:
-    name: cbs-shared-volume
-  gp_organization-shared-volume:
-    name: gp_organization-shared-volume
-  mumc-shared-volume:
-    name: mumc-shared-volume
-  escience-shared-volume:
-    name: escience-shared-volume
-
-networks:
-  gp-algorithm-net:
-    external:
-      name: vantage6-gp_organization-user-net
-
-#
-#  registry:
-#    image: registry:2
-#    ports:
-#      - 5001:5000
+      - API_URL=http://localhost:5001/api
