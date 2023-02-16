@@ -1,12 +1,17 @@
-DISCLAIMER: This setup is outdated. It is inadvisable to run the docker-compose setup because it is incomplete.
-
 # Vantage 6 local setup
 
 ## Running the local setup
-Simply run:
+Running the vantage6 server and gui:
 ```shell script
 docker-compose up -d
 ```
+You will have to install, register and set up a node as well.
+Installing the node is as follows:
+```shell script
+pip install vantage6
+```
+
+To set up a node you will have to follow the instructions from the [vantage6 documentation](https://docs.vantage6.ai/en/main/use/node.html#use-node).
 
 # Executing a task
 When your docker setup is running you can execute a task using `run_task.py`. Replace the value in `IMAGE` with your
