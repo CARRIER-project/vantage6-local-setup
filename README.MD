@@ -10,8 +10,10 @@ Installing the node is as follows:
 ```shell script
 pip install vantage6
 ```
+Next, you can use the GUI to register the node on the vantage6 server.
 
-To set up a node you will have to follow the instructions from the [vantage6 documentation](https://docs.vantage6.ai/en/main/use/node.html#use-node).
+
+To set up a node you will have to follow the instructions from the [vantage6 documentation](https://docs.vantage6.ai/en/main/use/node.html#use-node). You can use the command `vnode new` to follow the wizard.
 
 # Executing a task
 When your docker setup is running you can execute a task using `run_task.py`. Replace the value in `IMAGE` with your
