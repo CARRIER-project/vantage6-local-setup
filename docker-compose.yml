@@ -35,5 +35,6 @@ services:
     image: jupyter/minimal-notebook
     volumes:
       - ./jupyter/before_start.sh:/usr/local/bin/before-notebook.d/before_start.sh
+      - ./requirements.txt:/app/requirements.txt
     ports:
       - "8888:8888"

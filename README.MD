@@ -24,8 +24,9 @@ gui.
 - View your collaboration on the collaboration page, unfold it
 - Press `Register node for YOUR_ORGANIZATION` for one of your organizations
 - A window will pop up providing you with an api key. Copy it to somewhere safe
+- Next, go to the `users` page.
+- Create a new user and assign it to the other organization, give it the role of "researcher"
 
-Now that you have your api key you can set up a node.
 
 ## 3. Install a node outside of docker
 
@@ -70,11 +71,35 @@ Fill in the wizard as follows:
 
 The config file will be saved at `/HOMEDIR/.config/vantage6/node/test.yaml`
 
-# Executing a task
+# Logging in with the vantage6 client
+The docker compose includes a jupyter notebook environment where you can play around with the
+vantage6 client.
+Check the jupyter log by running the following in the root project directory:
+```docker-compose logs -f jupyter```
 
-When your docker setup is running you can execute a task using `run_task.py`. Replace the value
-in `IMAGE` with your
-desired docker image
+You will find the link (including authentication token) in the logs.
+
+Open the link in the browser and create a new notebook.
+
+You will log in to your vantage6 server as follows.
+
+Import the v6 client class:
+```python
+from vantage6.client import Client
+```
+
+Connect to the server:
+```python
+v6_client = Client("http://172.17.0.1", 5001)  # Host can be http://host.docker.internal depending on your system.
+```
+
+```python
+v6_client.authenticate('your_username', 'Your_password123')
+v6_client.setup_encryption(None) # We aren't using encryption
+```
+We're in!
+
+
 
 # Docker registry
 
