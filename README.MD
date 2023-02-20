@@ -27,7 +27,6 @@ gui.
 - Next, go to the `users` page.
 - Create a new user and assign it to the other organization, give it the role of "researcher"
 
-
 ## 3. Install a node outside of docker
 
 You will have to install, register and set up a node as well.
@@ -71,7 +70,8 @@ Fill in the wizard as follows:
 
 The config file will be saved at `/HOMEDIR/.config/vantage6/node/test.yaml`
 
-# Logging in with the vantage6 client
+## Logging in with the vantage6 client
+
 The docker compose includes a jupyter notebook environment where you can play around with the
 vantage6 client.
 Check the jupyter log by running the following in the root project directory:
@@ -84,22 +84,47 @@ Open the link in the browser and create a new notebook.
 You will log in to your vantage6 server as follows.
 
 Import the v6 client class:
+
 ```python
 from vantage6.client import Client
 ```
 
 Connect to the server:
+
 ```python
-v6_client = Client("http://172.17.0.1", 5001)  # Host can be http://host.docker.internal depending on your system.
+v6_client = Client("http://172.17.0.1",
+                   5001)  # Host can be http://host.docker.internal depending on your system.
 ```
 
 ```python
 v6_client.authenticate('your_username', 'Your_password123')
-v6_client.setup_encryption(None) # We aren't using encryption
+v6_client.setup_encryption(None)  # We aren't using encryption
 ```
+
 We're in!
 
+## Executing a task
 
+Let's retrieve the column names of our dataset from a collection
+of [vantage6 test algorithms](https://github.com/CARRIER-project/vantage6-test-algorithms).
+The docker image can be found
+at `harbor.carrier-mu.src.surf-hosted.nl/carrier/vantage6-test-algorithms`.
+
+```python
+# image = 'harbor.carrier-mu.src.surf-hosted.nl/carrier/vantage6-test-algorithms'
+task = v6_client.post_task('column_names', image=image,
+                           collaboration_id=1,
+                           organization_ids=[2],
+                           input_={'method': 'column_names', 'output_format':'json'})
+```
+It will take a moment to execute the algorithm. Then you can retrieve the result:
+
+```python
+result = client.get_results(task_id=task['id'])
+
+print(result)
+```
+If that worked you can also try the methods `correlation_matrix` and `count`.
 
 # Docker registry
 
