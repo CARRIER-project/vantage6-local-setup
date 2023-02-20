@@ -92,8 +92,9 @@ from vantage6.client import Client
 Connect to the server:
 
 ```python
+# Host can be http://host.docker.internal  or http://172.17.0.1 depending on your system.
 v6_client = Client("http://172.17.0.1",
-                   5001)  # Host can be http://host.docker.internal depending on your system.
+                   5001)  
 ```
 
 ```python
