@@ -70,7 +70,7 @@ Fill in the wizard as follows:
 
 The config file will be saved at `/HOMEDIR/.config/vantage6/node/test.yaml`
 
-## Logging in with the vantage6 client
+## 4. Logging in with the vantage6 client
 
 The docker compose includes a jupyter notebook environment where you can play around with the
 vantage6 client.
@@ -104,7 +104,7 @@ v6_client.setup_encryption(None)  # We aren't using encryption
 
 We're in!
 
-## Executing a task
+## 5. Executing a task
 
 Let's retrieve the column names of our dataset from a collection
 of [vantage6 test algorithms](https://github.com/CARRIER-project/vantage6-test-algorithms).
