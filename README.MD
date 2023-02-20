@@ -39,24 +39,25 @@ pip install vantage6==3.3.7
 We are installing version 3.3.7 because this is the same version that is running in docker compose.
 
 Set up a node with the command:
+
 ```shell
 vnode new
 ```
-You will need you api key. This is the key that will let the vantage6 server know the identity of this node.
 
-
-
+You will need you api key. This is the key that will let the vantage6 server know the identity of
+this node.
 
 To set up a node you will have to follow the instructions from
 the [vantage6 documentation](https://docs.vantage6.ai/en/main/use/node.html#use-node). You can use
 the command `vnode new` to follow the wizard.
 
 Fill in the wizard as follows:
+
 ```shell
 ? Please enter a configuration-name: test                                                     
 ? Please select the environment you want to configure:  application                           
 ? Enter given api-key: YOUR API KEY                                  
-? The base-URL of the server: http://localhost                                                
+? The base-URL of the server: `http://host.docker.internal` (win/mac) or  http://172.17.0.1 (linux)
 ? Enter port to which the server listens: 5001                                                
 ? Path of the api: /api                                                                       
 ? Task directory path: /HOMEDIR/.local/share/vantage6/node/test                           
