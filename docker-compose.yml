@@ -30,3 +30,10 @@ services:
       - "8080:80"
     environment:
       - API_URL=http://localhost:5001/api
+
+  jupyter:
+    image: jupyter/minimal-notebook
+    volumes:
+      - ./jupyter/before_start.sh:/usr/local/bin/before-notebook.d/before_start.sh
+    ports:
+      - "8888:8888"
