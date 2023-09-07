@@ -17,3 +17,17 @@ environments:
       use_console: true
     port: '5000'
     uri: postgresql://vantage:vantage@db/vantage
+
+    vpn_server:
+      # the URL of your VPN server
+      url:***REMOVED***
+
+      # OATH2 settings, make sure these are the same as in the
+      # configuration file of your EduVPN instance
+    ***REMOVED***
+    ***REMOVED***
+    ***REMOVED***
+
+      # Username and password to acccess the EduVPN portal
+      portal_username: vantage
+      portal_userpass: ***REMOVED***

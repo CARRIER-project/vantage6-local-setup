@@ -33,10 +33,10 @@ You will have to install, register and set up a node as well.
 Installing the node is as follows:
 
 ```shell script
-pip install vantage6==3.3.7
+pip install vantage6==3.9.0
 ```
 
-We are installing version 3.3.7 because this is the same version that is running in docker compose.
+We are installing version 3.9.0 because this is the same version that is running in docker compose.
 
 Set up a node with the command:
 
