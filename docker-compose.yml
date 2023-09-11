@@ -13,12 +13,12 @@ services:
       - ./pgdata:/data
 
   vserver:
-    image: "harbor2.vantage6.ai/infrastructure/server:3.9.0"
+    image: "harbor2.vantage6.ai/infrastructure/server:3.11.0"
     depends_on:
       - db
     volumes:
       - ./server:/mnt/
-    command: vserver-local start -c /mnt/config.yml
+    command: vserver-local start -c /mnt/config.yml 
     ports:
       - "5001:5000"
 
@@ -29,7 +29,7 @@ services:
     ports:
       - "8080:80"
     environment:
-      - API_URL=http://localhost:5001/api
+      - API_URL=http://172.17.0.1:5001/api
 
   jupyter:
     image: jupyter/minimal-notebook:2023-03-06
