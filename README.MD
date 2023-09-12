@@ -70,6 +70,8 @@ Fill in the wizard as follows:
 
 The config file will be saved at `/HOMEDIR/.config/vantage6/node/test.yaml`
 
+On Windows, the file will be saved at `/HOMEDIR/AppData/Local/vantage6/node/test.yaml`
+
 ## Starting the node
 ```shell
 vnode start
