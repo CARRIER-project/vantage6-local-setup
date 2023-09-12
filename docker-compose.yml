@@ -29,7 +29,7 @@ services:
     ports:
       - "8080:80"
     environment:
-      - API_URL=http://172.17.0.1:5001/api
+      - API_URL=http://localhost:5001/api
 
   jupyter:
     image: jupyter/minimal-notebook:2023-03-06
