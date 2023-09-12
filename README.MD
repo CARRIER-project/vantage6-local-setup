@@ -70,6 +70,13 @@ Fill in the wizard as follows:
 
 The config file will be saved at `/HOMEDIR/.config/vantage6/node/test.yaml`
 
+## Starting the node
+```shell
+vnode start
+
+# Select the node you want to start
+```
+
 ## 4. Logging in with the vantage6 client
 
 The docker compose includes a jupyter notebook environment where you can play around with the
