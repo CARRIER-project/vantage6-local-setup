@@ -119,7 +119,19 @@ v6_client.setup_encryption(None)  # We aren't using encryption
 
 We're in!
 
-## 5. Executing a task
+## 5. Getting the organization ids
+One way to get the organization ids of your nodes is to list the nodes that are online within your
+organization.
+
+```python
+nodes = v6_client.node.list(is_online=True)
+nodes = nodes['data']
+
+
+org_ids = [n['organization']['id'] for n in nodes]
+```
+
+## 6. Executing a task
 
 Let's retrieve the column names of our dataset from a collection
 of [vantage6 test algorithms](https://github.com/CARRIER-project/vantage6-test-algorithms).
