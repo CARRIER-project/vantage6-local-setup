@@ -79,6 +79,8 @@ vnode start
 
 ## 4. Logging in with the vantage6 client
 
+
+
 The docker compose includes a jupyter notebook environment where you can play around with the
 vantage6 client.
 Check the jupyter log by running the following in the root project directory:
@@ -87,6 +89,12 @@ Check the jupyter log by running the following in the root project directory:
 You will find the link (including authentication token) in the logs.
 
 Open the link in the browser and create a new notebook.
+
+Your jupyter environment probably doesn't have the vantage6 client installed yet, so first off,
+run the following in a cell:
+```jupyter
+!pip install vantage6==3.11.0
+```
 
 You will log in to your vantage6 server as follows.
 
