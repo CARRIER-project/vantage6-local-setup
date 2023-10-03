@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   db:
-    image: postgres
+    image: postgres:15-alpine
     environment:
       - "POSTGRES_USER=vantage"
       - "POSTGRES_PASSWORD=vantage"
@@ -13,7 +13,7 @@ services:
       - ./pgdata:/data
 
   vserver:
-    image: "harbor2.vantage6.ai/infrastructure/server:3.11.0"
+    image: "harbor2.vantage6.ai/infrastructure/server:3.11.1"
     depends_on:
       - db
     volumes:
@@ -21,7 +21,6 @@ services:
     command: vserver-local start -c /mnt/config.yml 
     ports:
       - "5001:5000"
-
   gui:
     image: harbor2.vantage6.ai/infrastructure/ui
     depends_on:
