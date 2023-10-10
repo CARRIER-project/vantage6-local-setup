@@ -13,7 +13,7 @@ services:
       - ./pgdata:/data
 
   vserver:
-    image: "harbor2.vantage6.ai/infrastructure/server:4.0.1"
+    image: "harbor2.vantage6.ai/infrastructure/server:4.0.2"
     depends_on:
       - db
     volumes:
