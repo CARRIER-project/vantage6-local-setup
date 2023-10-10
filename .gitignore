@@ -10,3 +10,4 @@ wireguard/client/config/
 wireguard/server/config/
 nodes/api_keys
 password.txt
+server/config.yml
