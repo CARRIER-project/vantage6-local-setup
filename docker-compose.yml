@@ -13,22 +13,22 @@ services:
       - ./pgdata:/data
 
   vserver:
-    image: "harbor2.vantage6.ai/infrastructure/server:3.11.1"
+    image: "harbor2.vantage6.ai/infrastructure/server:4.0.2"
     depends_on:
       - db
     volumes:
       - ./server:/mnt/
-    command: vserver-local start -c /mnt/config.yml 
+    command: uwsgi --http :5000 --gevent 1000 --http-websockets --master --callable app --disable-logging --wsgi-file /vantage6/vantage6-server/vantage6/server/wsgi.py --pyargv /mnt/config.yml
     ports:
-      - "5001:5000"
+      - "5000:5000"
   gui:
-    image: harbor2.vantage6.ai/infrastructure/ui
+    image: harbor2.vantage6.ai/infrastructure/ui:latest
     depends_on:
       - vserver
     ports:
       - "8080:80"
     environment:
-      - API_URL=http://localhost:5001/api
+      - API_URL=http://localhost:5000/api
 
   jupyter:
     image: jupyter/minimal-notebook:2023-03-06
