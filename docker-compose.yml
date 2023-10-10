@@ -13,14 +13,14 @@ services:
       - ./pgdata:/data
 
   vserver:
-    image: "harbor2.vantage6.ai/infrastructure/server:3.11.1"
+    image: harbor2.vantage6.ai/infrastructure/server:cotopaxi-live
     depends_on:
       - db
     volumes:
       - ./server:/mnt/
-    command: vserver-local start -c /mnt/config.yml 
     ports:
-      - "5001:5000"
+      - "5000:5000"
+    command: ["/bin/bash", "-c", "/usr/sbin/sshd && /vantage6/vantage6-server/server.sh"]
   gui:
     image: harbor2.vantage6.ai/infrastructure/ui
     depends_on:
