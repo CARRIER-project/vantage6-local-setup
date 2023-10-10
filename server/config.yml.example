@@ -18,6 +18,7 @@ environments:
     port: '5000'
     uri: postgresql://vantage:vantage@db/vantage
 
+
     vpn_server:
       # the URL of your VPN server
       url:
@@ -25,6 +26,9 @@ environments:
       # OATH2 settings, make sure these are the same as in the
       # configuration file of your EduVPN instance
       # Username and password to acccess the EduVPN portal
+      redirect_url: http://localhost                                                                                                                                                        
+      client_id: 
+      client_secret: 
 
 
       portal_username: 
