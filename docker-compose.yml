@@ -20,9 +20,15 @@ services:
       - ./server:/mnt/
     ports:
       - "5000:5000"
-    command: ["/bin/bash", "-c", "/usr/sbin/sshd && /vantage6/vantage6-server/server.sh"]
+    command: >
+      uwsgi --http :5000 --gevent 1000 --http-websockets
+        --master --callable app --disable-logging
+        --wsgi-file /vantage6/vantage6-server/vantage6/server/wsgi.py
+        --pyargv /mnt/config.yaml
+  
+
   gui:
-    image: harbor2.vantage6.ai/infrastructure/ui
+    image: harbor2.vantage6.ai/infrastructure/ui:cotopaxi
     depends_on:
       - vserver
     ports:
