@@ -1,4 +1,4 @@
 vantage6-client==3.11.0
-vantage6==3.11.0
+vantage6==4.0.2
 scikit-learn
 pandas
